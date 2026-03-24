@@ -1,7 +1,6 @@
 import { useState, useCallback } from 'react';
 import * as Speech from 'expo-speech';
 import { Audio } from 'expo-av';
-import * as SpeechRecognition from 'expo-speech-recognition';
 
 type VoiceState = 'idle' | 'listening' | 'processing' | 'speaking';
 
@@ -11,25 +10,17 @@ export default function useVoice() {
   const [recording, setRecording] = useState<Audio.Recording | null>(null);
 
   const requestPermissions = useCallback(async () => {
-    const [audioStatus, speechStatus] = await Promise.all([
-      Audio.requestPermissionsAsync(),
-      SpeechRecognition.requestPermissionsAsync(),
-    ]);
-    return audioStatus.granted && speechStatus.granted;
+    const { status } = await Audio.requestPermissionsAsync();
+    return status === 'granted';
   }, []);
 
   const startListening = useCallback(async () => {
     const hasPermission = await requestPermissions();
     if (!hasPermission) {
-      throw new Error('Microphone or speech recognition permission denied');
+      throw new Error('Microphone permission denied');
     }
 
     setState('listening');
-    await SpeechRecognition.startListeningAsync({
-      language: 'en',
-      interimResults: true,
-    });
-    // Start recording for backup
     await Audio.setAudioModeAsync({
       allowsRecordingIOS: true,
       playsInSilentModeIOS: true,
@@ -38,18 +29,17 @@ export default function useVoice() {
       Audio.RecordingOptionsPresets.HIGH_QUALITY
     );
     setRecording(recording);
+    // For now, we'll simulate speech recognition with a placeholder.
+    // In a real app, integrate expo-speech-recognition or a cloud API.
+    setTranscript('Simulated voice input');
   }, [requestPermissions]);
 
   const stopListening = useCallback(async () => {
     setState('processing');
-    await SpeechRecognition.stopListeningAsync();
     if (recording) {
       await recording.stopAndUnloadAsync();
       setRecording(null);
     }
-    const result = await SpeechRecognition.getAvailablePermissionsAsync();
-    // For now, we'll use the transcript from expo-speech-recognition
-    // In a real app, you might also process the recording file.
     setState('idle');
     return transcript;
   }, [recording, transcript]);

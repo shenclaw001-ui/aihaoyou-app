@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { generate, chat } from '../services/ollama';
+import { chat } from '../services/ollama';
 
 export type Message = {
   id: string;
@@ -48,7 +48,7 @@ const useConversationStore = create<ConversationStore>((set, get) => ({
 
       const response = await chat(chatHistory, currentModel);
       addMessage(response, 'ai');
-    } catch (error) {
+    } catch (error: any) {
       addMessage(`Sorry, I encountered an error: ${error.message}`, 'ai');
     } finally {
       set({ isProcessing: false });
