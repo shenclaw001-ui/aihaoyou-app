@@ -1,6 +1,7 @@
 import React from 'react';
 import { TouchableOpacity, Text, StyleSheet, View } from 'react-native';
 import { Colors } from '../constants/Colors';
+import useI18n from '../hooks/useI18n';
 
 type VoiceButtonProps = {
   state: 'idle' | 'listening' | 'processing' | 'speaking';
@@ -9,6 +10,8 @@ type VoiceButtonProps = {
 };
 
 export default function VoiceButton({ state, onPressIn, onPressOut }: VoiceButtonProps) {
+  const { t } = useI18n();
+
   const getButtonColor = () => {
     switch (state) {
       case 'listening':
@@ -25,13 +28,13 @@ export default function VoiceButton({ state, onPressIn, onPressOut }: VoiceButto
   const getButtonText = () => {
     switch (state) {
       case 'listening':
-        return 'Listening...';
+        return t('listening');
       case 'processing':
-        return 'Processing';
+        return t('processing');
       case 'speaking':
-        return 'Speaking';
+        return t('speaking');
       default:
-        return 'Hold to Talk';
+        return t('holdToTalk');
     }
   };
 

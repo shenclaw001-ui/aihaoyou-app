@@ -11,9 +11,11 @@ import {
 } from 'react-native';
 import { Colors } from '../constants/Colors';
 import useVoice from '../hooks/useVoice';
+import useI18n from '../hooks/useI18n';
 import useConversationStore from '../store/useConversationStore';
 import MessageBubble from '../components/MessageBubble';
 import VoiceButton from '../components/VoiceButton';
+import LanguagePicker from '../components/LanguagePicker';
 
 export default function ChatScreen() {
   const {
@@ -23,6 +25,7 @@ export default function ChatScreen() {
     clearConversation,
   } = useConversationStore();
   const { state, startListening, stopListening, speak } = useVoice();
+  const { t } = useI18n();
   const [textInput, setTextInput] = React.useState('');
   const flatListRef = useRef<FlatList>(null);
 
@@ -61,11 +64,13 @@ export default function ChatScreen() {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.title}>AI好友</Text>
+        <Text style={styles.title}>{t('appTitle')}</Text>
         <TouchableOpacity onPress={clearConversation} style={styles.clearButton}>
-          <Text style={styles.clearButtonText}>Clear</Text>
+          <Text style={styles.clearButtonText}>{t('clear')}</Text>
         </TouchableOpacity>
       </View>
+
+      <LanguagePicker />
 
       <FlatList
         ref={flatListRef}
@@ -76,7 +81,7 @@ export default function ChatScreen() {
         ListEmptyComponent={
           <View style={styles.emptyState}>
             <Text style={styles.emptyStateText}>
-              Start a conversation by typing or holding the microphone.
+              {t('startConversation')}
             </Text>
           </View>
         }
@@ -85,14 +90,14 @@ export default function ChatScreen() {
       {isProcessing && (
         <View style={styles.processingIndicator}>
           <ActivityIndicator size="small" color={Colors.primary} />
-          <Text style={styles.processingText}>AI is thinking...</Text>
+          <Text style={styles.processingText}>{t('aiThinking')}</Text>
         </View>
       )}
 
       <View style={styles.inputContainer}>
         <TextInput
           style={styles.textInput}
-          placeholder="Type your message..."
+          placeholder={t('typeMessage')}
           value={textInput}
           onChangeText={setTextInput}
           onSubmitEditing={handleSend}
@@ -103,7 +108,7 @@ export default function ChatScreen() {
           onPress={handleSend}
           disabled={!textInput.trim() || isProcessing}
         >
-          <Text style={styles.sendButtonText}>Send</Text>
+          <Text style={styles.sendButtonText}>{t('send')}</Text>
         </TouchableOpacity>
       </View>
 
@@ -114,12 +119,12 @@ export default function ChatScreen() {
           onPressOut={handleVoicePressOut}
         />
         <TouchableOpacity style={styles.speakButton} onPress={handleSpeakLast}>
-          <Text style={styles.speakButtonText}>Repeat</Text>
+          <Text style={styles.speakButtonText}>{t('repeat')}</Text>
         </TouchableOpacity>
       </View>
 
       <Text style={styles.hint}>
-        Hold the microphone to speak, release to send.
+        {t('hint')}
       </Text>
     </SafeAreaView>
   );
