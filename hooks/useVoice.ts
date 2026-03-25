@@ -29,9 +29,10 @@ export default function useVoice() {
       Audio.RecordingOptionsPresets.HIGH_QUALITY
     );
     setRecording(recording);
-    // For now, we'll simulate speech recognition with a placeholder.
-    // In a real app, integrate expo-speech-recognition or a cloud API.
-    setTranscript('Simulated voice input');
+    // Simulate speech recognition after 2 seconds
+    setTimeout(() => {
+      setTranscript('Simulated voice input: Hello, how are you?');
+    }, 2000);
   }, [requestPermissions]);
 
   const stopListening = useCallback(async () => {
@@ -40,7 +41,10 @@ export default function useVoice() {
       await recording.stopAndUnloadAsync();
       setRecording(null);
     }
-    setState('idle');
+    // Simulate processing delay
+    setTimeout(() => {
+      setState('idle');
+    }, 1000);
     return transcript;
   }, [recording, transcript]);
 
