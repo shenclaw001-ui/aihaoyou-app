@@ -48,10 +48,18 @@ export default function useVoice() {
     return transcript;
   }, [recording, transcript]);
 
-  const speak = useCallback((text: string) => {
+  const speak = useCallback((text: string, language?: string) => {
     setState('speaking');
+    // Map locale to Speech language code
+    let langCode = 'en';
+    if (language) {
+      if (language.startsWith('zh')) langCode = 'zh-CN';
+      else if (language.startsWith('ko')) langCode = 'ko-KR';
+      else if (language.startsWith('ja')) langCode = 'ja-JP';
+      else langCode = language.split('-')[0];
+    }
     Speech.speak(text, {
-      language: 'en',
+      language: langCode,
       pitch: 1.0,
       rate: 0.9,
       onDone: () => setState('idle'),

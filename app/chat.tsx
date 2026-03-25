@@ -26,7 +26,7 @@ export default function ChatScreen() {
     clearConversation,
   } = useConversationStore();
   const { state, startListening, stopListening, speak } = useVoice();
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
   const [textInput, setTextInput] = React.useState('');
   const flatListRef = useRef<FlatList>(null);
 
@@ -58,7 +58,7 @@ export default function ChatScreen() {
   const handleSpeakLast = () => {
     const lastAiMessage = messages.filter((m) => m.sender === 'ai').pop();
     if (lastAiMessage) {
-      speak(lastAiMessage.text);
+      speak(lastAiMessage.text, locale);
     }
   };
 
