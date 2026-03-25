@@ -9,6 +9,12 @@ export const Colors = {
   success: '#34C759',
   warning: '#FF9500',
   divider: '#C6C6C8',
+  // Additional colors for components
+  card: '#FFFFFF',
+  input: '#FFFFFF',
+  border: '#C6C6C8',
+  white: '#FFFFFF',
+  muted: '#8E8E93',
 };
 
 export const DarkColors = {

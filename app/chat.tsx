@@ -16,6 +16,7 @@ import useConversationStore from '../store/useConversationStore';
 import MessageBubble from '../components/MessageBubble';
 import VoiceButton from '../components/VoiceButton';
 import LanguagePicker from '../components/LanguagePicker';
+import ModelPicker from '../components/ModelPicker';
 
 export default function ChatScreen() {
   const {
@@ -71,6 +72,7 @@ export default function ChatScreen() {
       </View>
 
       <LanguagePicker />
+      <ModelPicker />
 
       <FlatList
         ref={flatListRef}

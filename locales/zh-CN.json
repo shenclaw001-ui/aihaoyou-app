@@ -25,5 +25,6 @@
   "retry": "重试",
   "permissionDenied": "麦克风权限被拒绝。请在设置中启用。",
   "networkError": "网络错误。请检查连接。",
-  "noModels": "没有可用模型。"
+  "noModels": "没有可用模型。",
+  "loading": "加载中..."
 }

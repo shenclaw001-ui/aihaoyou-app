@@ -3,6 +3,7 @@ import { Platform } from 'react-native';
 const OLLAMA_BASE_URL = Platform.select({
   android: 'http://10.0.2.2:11434/v1', // Android emulator host
   ios: 'http://localhost:11434/v1',
+  web: '/api/ollama', // Proxy via Metro dev server
   default: 'http://localhost:11434/v1',
 });
 
@@ -36,7 +37,15 @@ export async function chat(messages: { role: string; content: string }[], model:
         stream: false,
       }),
     });
-    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    if (!response.ok) {
+      const text = await response.text();
+      throw new Error(`HTTP ${response.status}: ${text.substring(0, 200)}`);
+    }
+    const contentType = response.headers.get('content-type');
+    if (!contentType?.includes('application/json')) {
+      const text = await response.text();
+      throw new Error(`Expected JSON, got ${contentType}: ${text.substring(0, 200)}`);
+    }
     const data = await response.json();
     return data.choices?.[0]?.message?.content?.trim() || 'No response from model.';
   } catch (error) {

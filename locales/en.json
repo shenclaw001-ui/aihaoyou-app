@@ -25,5 +25,6 @@
   "retry": "Retry",
   "permissionDenied": "Microphone permission denied. Please enable in settings.",
   "networkError": "Network error. Please check your connection.",
-  "noModels": "No models available."
+  "noModels": "No models available.",
+  "loading": "Loading..."
 }
